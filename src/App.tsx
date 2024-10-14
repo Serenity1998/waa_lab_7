@@ -4,41 +4,6 @@ import avatar from './images/bozai.png'
 import { sortByDate, sortByLike } from './utils'
 import { CommentType } from './type'
 
-
-// Comment List data
-const defaultList: CommentType[] = [{
-  rpid: 3,
-  user: {
-    uid: '13258165',
-    avatar: '',
-    uname: 'Jay Zhou',
-  },
-  content: 'Nice, well done',
-  ctime: '10-18 08:15',
-  like: 88,
-}, {
-  rpid: 2,
-  user: {
-    uid: '36080105',
-    avatar: '',
-    uname: 'Song Xu',
-  },
-  content: 'I search for you thousands of times, from dawn till dusk.',
-  ctime: '11-13 11:29',
-  like: 88,
-}, {
-  rpid: 1,
-  user: {
-    uid: '30009257',
-    avatar,
-    uname: 'John',
-  },
-  content: 'I told my computer I needed a break... now it will not stop sending me vacation ads.',
-  ctime: '10-19 09:00',
-  like: 66,
-},
-]
-
 // current logged in user info
 const user = {
   // userid
@@ -62,8 +27,22 @@ const App = () => {
   const [isLikeAscending, setLikeAscending] = useState(false);
 
   useEffect(() => {
-    setComments([...defaultList]);
+    fetchData()
   }, [])
+
+  const fetchData = () => {
+    fetch("http://localhost:3001/defaultList", {
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then((data) => {
+      console.log(data.body)
+      // setComments([...data.body]);
+    }).catch(e => {
+      console.log(e)
+    })
+  }
 
   return (
     <div className="app">
@@ -113,7 +92,7 @@ const App = () => {
         {/* comment list */}
         <div className="reply-list">
           {
-            (sorted_comments.length > 0 ? sorted_comments : defaultList).map((i) => (
+            (sorted_comments.length > 0 ? sorted_comments : comments).map((i) => (
               <div className="reply-item" key={i.rpid}>
                 {/* profile */}
                 <div className="root-reply-avatar">
